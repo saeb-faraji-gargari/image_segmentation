@@ -76,4 +76,6 @@ def filter_nested_and_small_contours(
         if not is_inside:
             selected_contours.append(contour)
 
+        np.savez_compressed("filtered_contours.npz", *selected_contours)
+
     return selected_contours

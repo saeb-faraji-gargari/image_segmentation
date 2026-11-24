@@ -155,3 +155,39 @@ def plot_contour(
     plt.ylabel("Row")
     plt.tight_layout()
     plt.show()
+
+
+def plot_smallest_contour(
+    raster: npt.NDArray,
+    contours: list[npt.NDArray],
+) -> None:
+    """
+    Plot a raster and its smallest contour.
+
+    Parameters
+    ----------
+    raster : npt.NDArray
+        Two-dimensional raster to display.
+    contours : list[npt.NDArray]
+        Contours returned by contourline_segmentation().
+    """
+    if len(contours) == 0:
+        raise RuntimeError("No contour found")
+
+    polygon = min(contours, key=len)
+
+    # find_contours returns (row, column) coordinates.
+    polygon_y = polygon[:, 0]
+    polygon_x = polygon[:, 1]
+
+    print("Selected contour points:", len(polygon))
+
+    plt.figure(figsize=(10, 10))
+    plt.imshow(raster, cmap="gray", vmin=0, vmax=1)
+    plt.plot(polygon_x, polygon_y, "-r", linewidth=2)
+
+    plt.colorbar(label="Probability")
+    plt.xlabel("Column")
+    plt.ylabel("Row")
+    plt.tight_layout()
+    plt.show()
